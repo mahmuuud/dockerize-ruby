@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: drkiq
+  name: drkiq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: drkiq
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: drkiq
+    spec:
+      containers:
+        - env:
+            - name: CACHE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: CACHE_URL
+                  name: env
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_URL
+                  name: env
+            - name: GROUP_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: GROUP_ID
+                  name: env
+            - name: JOB_WORKER_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: JOB_WORKER_URL
+                  name: env
+            - name: LISTEN_ON
+              valueFrom:
+                configMapKeyRef:
+                  key: LISTEN_ON
+                  name: env
+            - name: SECRET_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  key: SECRET_TOKEN
+                  name: env
+            - name: USER_ID
+              valueFrom:
+                configMapKeyRef:
+                  key: USER_ID
+                  name: env
+            - name: WORKER_PROCESSES
+              valueFrom:
+                configMapKeyRef:
+                  key: WORKER_PROCESSES
+                  name: env
+          image: drkiq
+          name: drkiq
+          workingDir: /opt/app
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8010
+          resources: {}
+          # volumeMounts:
+          #   - mountPath: /opt/app
+          #     name: drkiq-claim0
+      restartPolicy: Always
+      # volumes:
+      #   - name: drkiq-claim0
+      #     persistentVolumeClaim:
+      #       claimName: drkiq-claim0
+status: {}
